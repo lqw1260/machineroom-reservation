@@ -1,6 +1,5 @@
 import HomePage from '../views/HomePage.vue'
 import MainView from '../views/MainView/MainView.vue'
-import MachineRoomInfo from '../views/MachineRoomInfo/MachineRoomInfo.vue'
 
 export const constantRoute = [
     {
@@ -18,11 +17,11 @@ export const constantRoute = [
                 }
             },
             {
-                path: '/machineRoomInfo',
-                name: 'machineRoomInfo',
-                component: MachineRoomInfo,
+                path: '/appointmentRecord',
+                name: 'appointmentRecord',
+                component: () => import('@/views/AppointmentRecord/AppointmentRecord.vue'),
                 meta: {
-                    title: '机房预约使用情况',
+                    title: '预约记录',
                 }
             }
         ]
@@ -43,11 +42,11 @@ export const constantRoute = [
 //异步路由
 export const asnycRoute = [
     {
-        path: '/appointmentRecord',
-        name: 'appointmentRecord',
-        component: () => import('@/views/AppointmentRecord/AppointmentRecord.vue'),
+        path: '/machineResvation',
+        name: 'machineResvation',
+        component: () => import('@/views/MachineReservation/MachineReservation.vue'),
         meta: {
-            title: '预约记录',
+            title: '机房预约',
             rules: ['admin', 'teacher']
         }
     }

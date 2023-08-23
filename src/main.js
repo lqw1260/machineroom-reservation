@@ -12,7 +12,9 @@ import './api/mock'
 Vue.config.productionTip = false
 
 Vue.use(ElementUI);
-// import request from './api/request';
+//挂载请求方法到vue原型链上
+import request from './api/request';
+Vue.prototype.$request = request;
 // request.post('/api/login', {
 //   data: {
 //     username: 'admin',

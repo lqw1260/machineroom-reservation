@@ -25,17 +25,18 @@
     </div>
 </template>
 <script>
-import request from '@/api/request'
+// import request from '@/api/request'
 import {asnycRoute} from '@/router/router'
 export default {
     data(){
         return{
             form: {
-                username: '',
-                password: '',
+                username: '',//账号
+                password: '',//密码
             },
-            dialogFormVisible: false,
+            dialogFormVisible: false,//是否展示对话框
             formLabelWidth: '120px',
+            //表单验证规则
             rules: {
                 username: [
                     { required: true, message: '请输入活动名称', trigger: 'blur' },
@@ -57,13 +58,15 @@ export default {
             
             // console.log(this.form);
             // console.log(this.$request);
-            const data = this.form
+            // const data = this.form
             // function req(result) {
             //     console.log(result.data);
             //     }
-            const result = await request.post('/api/login',{
-                data
-            })
+            // const result = await request.post('/api/login',{
+            //     data
+            // })
+            //发送请求
+            const result = await this.$request.post('/api/login',{data:this.form});
             // console.log(result.data);
             //获取token并保存到本地
             let { token } = result.data;
@@ -83,11 +86,12 @@ export default {
                 this.$router.addRoute('homePage',item)
             })
             this.$store.commit('updateRoute',route)
-            const userInfo = await request.post('/api/getUserInfo',{
-                data:{
-                    token
-                }
-            })
+            // const userInfo = await request.post('/api/getUserInfo',{
+            //     data:{
+            //         token
+            //     }
+            // })
+            const userInfo = await this.$request.post('/api/getUserInfo',{data:{token}});
             // console.log(userInfo);
             this.$store.commit('updateUserInfo',userInfo.data)
             // console.log(route);
