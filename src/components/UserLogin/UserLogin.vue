@@ -74,6 +74,7 @@ export default {
             this.$store.commit('setToken',token);
             //动态添加路由
             let {roles} = result.data;
+            localStorage.setItem('role',roles);
             // console.log(this.$store.state.token);
             // console.log(this.$store.state.token);
             const route = asnycRoute.filter((item)=>{
@@ -93,7 +94,7 @@ export default {
             // })
             const userInfo = await this.$request.post('/api/getUserInfo',{data:{token}});
             // console.log(userInfo);
-            this.$store.commit('updateUserInfo',userInfo.data)
+            this.$store.commit('updateUserInfo',userInfo.data);
             // console.log(route);
             // console.log(result);
             this.$nextTick(()=>{

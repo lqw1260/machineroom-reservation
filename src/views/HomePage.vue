@@ -20,14 +20,39 @@
 </template>
 <script>
 import NavBar from '../components/NavBar/NavBar.vue'
+
+import {asnycRoute} from '@/router/router'
 export default {
   components:{
     NavBar
   },
-    data() {
+  data() {
       return {
       };
-    },
+  },
+  //访问时查看是否已经登录
+  async created(){
+    let token = localStorage.getItem('token');
+    // console.log(token);
+    if(token){
+      const userInfo = await this.$request.post('/api/getUserInfo',{data:{token}});
+      // console.log(userInfo);
+      let roles = localStorage.getItem('role');
+      const route = asnycRoute.filter((item)=>{
+               if(item.meta.rules.includes(roles)){
+                return true;
+               }
+               return false;
+            })
+            console.log(route);
+      route.forEach((item)=>{
+          this.$router.addRoute('homePage',item)
+      })
+      this.$store.commit('updateRoute',route)
+      this.$store.commit('setToken',token);
+      this.$store.commit('updateUserInfo',userInfo.data);
+    }
+  }
     // created(){
     //   console.log(this.$router)
     // }
