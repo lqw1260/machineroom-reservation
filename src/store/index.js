@@ -18,13 +18,14 @@ const mutations = {
     },
     getToken(state) {
         console.log('有人读取user.token');
-        state.token = state.token || localStorage.getItem('token')
+        state.token = state.token || localStorage.getItem('token') || ''
     },
     updateRoute(state, val) {
         state.routes.push(...val)
     },
     updateUserInfo(state, val) {
-        state.user.name = val.name
+        // state.user.name = val.name
+        Object.assign(state.user, val);
     }
 }
 //准备state对象——保存具体的数据
@@ -33,7 +34,9 @@ const state = {
     user: {
         name: ''
     },
-    routes: constantRoute[0].children
+    routes: constantRoute[0].children.filter((item) => {
+        return !!item.meta.isShow
+    })
 }
 
 export default new Vuex.Store({

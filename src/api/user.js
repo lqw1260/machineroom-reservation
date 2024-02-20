@@ -12,7 +12,7 @@ function createUserList() {
             roles: 'admin',
             buttons: ['cuser.detail'],
             routes: ['home'],
-            token: 'Admin Token',
+            token: 'Admin Token1',
         },
         {
             userId: 2,
@@ -65,7 +65,7 @@ export default {
         )
         //没有用户返回失败信息
         if (!checkUser) {
-            return { code: 201, data: { message: '账号或者密码不正确' } }
+            return { code: 401, data: { message: 'token已过期' } }
         }
         //如果有返回成功信息
         const { name } = checkUser

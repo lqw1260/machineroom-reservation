@@ -1,5 +1,8 @@
+
+
 import HomePage from '../views/HomePage.vue'
 import MainView from '../views/MainView/MainView.vue'
+import showReservationStatus from '../views/showReservationStatus/showReservationStatus.vue'
 
 export const constantRoute = [
     {
@@ -14,6 +17,20 @@ export const constantRoute = [
                 component: MainView,
                 meta: {
                     title: '主页',
+                    isShow: true,
+                }
+            },
+            {
+                path: '/showReservationStatus',
+                name: 'showReservationStatus',
+                component: showReservationStatus,
+                props(route) {
+                    return {
+                        item: route.query.item
+                    }
+                },
+                meta: {
+                    title: '预约情况'
                 }
             },
             {
@@ -22,6 +39,16 @@ export const constantRoute = [
                 component: () => import('@/views/AppointmentRecord/AppointmentRecord.vue'),
                 meta: {
                     title: '预约记录',
+                    isShow: true,
+                }
+            },
+            {
+                path: 'applicationProcessing',
+                name: 'applicationProcessing',
+                component: () => import('@/views/applicationProcessing/applicationProcessing.vue'),
+                meta: {
+                    title: '申请处理',
+                    isShow: false
                 }
             }
         ]
@@ -40,18 +67,18 @@ export const constantRoute = [
 ]
 
 //异步路由
-export const asnycRoute = [
-    {
-        path: '/machineResvation',
-        name: 'machineResvation',
-        component: () => import('@/views/MachineReservation/MachineReservation.vue'),
-        meta: {
-            title: '机房预约',
-            rules: ['admin', 'teacher']
-        }
-    }
+// export const asnycRoute = [
+//     {
+//         path: '/machineResvation',
+//         name: 'machineResvation',
+//         component: () => import('@/views/MachineReservation/MachineReservation.vue'),
+//         meta: {
+//             title: '机房预约',
+//             rules: ['admin', 'teacher']
+//         }
+//     }
 
-]
+// ]
 
 //任意路由
 export const anyRoute = {

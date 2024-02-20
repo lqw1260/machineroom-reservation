@@ -21,7 +21,6 @@
 <script>
 import NavBar from '../components/NavBar/NavBar.vue'
 
-import {asnycRoute} from '@/router/router'
 export default {
   components:{
     NavBar
@@ -31,31 +30,47 @@ export default {
       };
   },
   //访问时查看是否已经登录
+  // async created(){
+  //   let token = localStorage.getItem('token');
+  //   // console.log(token);
+  //   if(token){
+  //     const userInfo = await this.$request.post('/api/getUserInfo',{data:{token}});
+  //     // console.log(userInfo);
+  //     let roles = localStorage.getItem('role');
+  //     // 路由操作
+  //     const route = asnycRoute.filter((item)=>{
+  //              if(item.meta.rules.includes(roles)){
+  //               return true;
+  //              }
+  //              return false;
+  //           })
+  //     console.log(route);
+  //     route.forEach((item)=>{
+  //         this.$router.addRoute('homePage',item)
+  //     })
+  //     // 更新用户变量
+  //     this.$store.commit('updateRoute',route);
+  //     this.$store.commit('setToken',token);
+  //     this.$store.commit('updateUserInfo',userInfo.data);
+  //   }
+  // }
+
   async created(){
     let token = localStorage.getItem('token');
     // console.log(token);
     if(token){
-      const userInfo = await this.$request.post('/api/getUserInfo',{data:{token}});
-      // console.log(userInfo);
-      let roles = localStorage.getItem('role');
-      const route = asnycRoute.filter((item)=>{
-               if(item.meta.rules.includes(roles)){
-                return true;
-               }
-               return false;
-            })
-            console.log(route);
-      route.forEach((item)=>{
-          this.$router.addRoute('homePage',item)
+      await this.$request.post('/api/getUserInfo',{data:{token}}).then((userInfo)=>{
+        console.log(userInfo);
+        this.$store.commit('setToken',token);
+        this.$store.commit('updateUserInfo',userInfo.data);
+      }).catch(()=>{
+        //如果收到token过期则清空本地token
+        localStorage.removeItem('token');
       })
-      this.$store.commit('updateRoute',route)
-      this.$store.commit('setToken',token);
-      this.$store.commit('updateUserInfo',userInfo.data);
+      // console.log(userInfo);
+      
     }
-  }
-    // created(){
-    //   console.log(this.$router)
-    // }
+  },
 }
 </script>
 <style scoped>

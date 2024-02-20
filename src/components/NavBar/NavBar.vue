@@ -10,7 +10,7 @@
         text-color="#fff">
               <el-menu-item 
                 @click="clickMenu(item)" 
-                v-for="item in constantRoute" 
+                v-for="item in menu" 
                 :index="item.name" 
                 :key="item.path"
                 :class="item.name===activeIndex? 'active' : ''"
@@ -37,7 +37,7 @@ export default {
     data() {
       return {
         activeIndex: 'mainView',
-        constantRoute:this.$store.state.routes
+        menu:this.$store.state.routes
       };
     },
     // computed:{
@@ -65,7 +65,7 @@ export default {
     }
 }
 </script>
-<style>
+<style scoped>
 .active{
     background-color: #008000 !important;
 }

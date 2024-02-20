@@ -8,7 +8,7 @@
             <span>{{$store.state.user.name}}</span>
         </template>
 
-        <el-dialog title="系统登录" :visible.sync="dialogFormVisible" width="40%">
+        <el-dialog title="系统登录" :visible.sync="isopen" width="40%">
             <el-form :model="form" :rules="rules">
                 <el-form-item label="账号" :label-width="formLabelWidth" :required="true" prop="username">
                     <el-input v-model="form.username" autocomplete="off"></el-input>
@@ -26,7 +26,7 @@
 </template>
 <script>
 // import request from '@/api/request'
-import {asnycRoute} from '@/router/router'
+// import {asnycRoute} from '@/router/router'
 export default {
     data(){
         return{
@@ -50,58 +50,38 @@ export default {
         }
         
     },
+    computed: {
+        isopen(){
+            return this.dialogFormVisible && !this.$store.state.token;
+        }
+    },
     methods: {
         handleClick() {
             this.dialogFormVisible = true
         },
         async formSubmit(){
-            
-            // console.log(this.form);
-            // console.log(this.$request);
-            // const data = this.form
-            // function req(result) {
-            //     console.log(result.data);
-            //     }
-            // const result = await request.post('/api/login',{
-            //     data
-            // })
             //发送请求
-            const result = await this.$request.post('/api/login',{data:this.form});
-            // console.log(result.data);
-            //获取token并保存到本地
-            let { token } = result.data;
-            localStorage.setItem('token',token);
-            this.$store.commit('setToken',token);
-            //动态添加路由
-            let {roles} = result.data;
-            localStorage.setItem('role',roles);
-            // console.log(this.$store.state.token);
-            // console.log(this.$store.state.token);
-            const route = asnycRoute.filter((item)=>{
-               if(item.meta.rules.includes(roles)){
-                return true;
-               }
-               return false;
-            })
-            route.forEach((item)=>{
-                this.$router.addRoute('homePage',item)
-            })
-            this.$store.commit('updateRoute',route)
-            // const userInfo = await request.post('/api/getUserInfo',{
-            //     data:{
-            //         token
-            //     }
-            // })
-            const userInfo = await this.$request.post('/api/getUserInfo',{data:{token}});
-            // console.log(userInfo);
-            this.$store.commit('updateUserInfo',userInfo.data);
-            // console.log(route);
-            // console.log(result);
-            this.$nextTick(()=>{
+            const result = await this.$request.post('/api/login',{data:this.form}).catch(()=>{
+                //获取失败的情况
                 this.form.username=''
                 this.form.password=''
-                this.dialogFormVisible = false
             })
+            //获取token并保存到本地
+            if(result.data){
+                let { token } = result.data;
+                localStorage.setItem('token',token);
+                this.$store.commit('setToken',token);
+                // 更新用户信息
+                const userInfo = await this.$request.post('/api/getUserInfo',{data:{token}});
+                this.$store.commit('updateUserInfo',userInfo.data);
+
+                this.$nextTick(()=>{
+                    this.form.username=''
+                    this.form.password=''
+                    this.dialogFormVisible = false
+                })
+            }
+            
         }
     }
 }
