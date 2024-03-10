@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template lang="">
     <div class="nav">
         <el-menu 
@@ -74,4 +75,95 @@ export default {
     justify-content: space-between;
     align-items: center;
 }
+=======
+<template lang="">
+    <div class="nav">
+        <el-menu 
+        router
+        :default-active="activeIndex" 
+        class="el-menu-demo" 
+        mode="horizontal" 
+        @select="handleSelect" 
+        background-color="#222d32"
+        active-text-color="#fff"
+        text-color="#fff">
+              <el-menu-item 
+                @click="clickMenu(item)" 
+                v-for="item in menu" 
+                :index="item.name" 
+                :key="item.path"
+                :class="item.name===activeIndex? 'active' : ''"
+                >
+                {{ item.meta.title }}
+              </el-menu-item>
+              
+              <!-- 如果是管理员才展示 -->
+              <!-- v-if条件判断可以判断是否是管理员 -->
+              <template v-if="$store.state.token">
+                <el-menu-item index="applicationProcessing" :class="this.$route.path=='/applicationProcessing'? 'active' : ''">
+                预约处理
+              </el-menu-item>
+                <el-menu-item index="roommanage">
+                  机房管理
+                </el-menu-item>
+                <el-menu-item index="usermanage">用户管理</el-menu-item>
+              </template>
+        </el-menu>
+        <User-Login />
+    </div>
+</template>
+<script>
+import UserLogin from '../UserLogin/UserLogin.vue';
+// import { constantRoute } from '@/router/router.js'
+export default {
+  components: {
+    UserLogin,
+  },
+  data() {
+    return {
+      activeIndex: '',
+      menu: this.$store.state.routes
+    };
+  },
+  // computed:{
+  //   routes(){
+  //     return this.$store.state.routes
+  //   }
+  // },
+  methods: {
+    handleSelect(key, keyPath) {
+      console.log(key, keyPath);
+      
+      if(key=='applicationProcessing'){
+        this.activeIndex = '';
+      }
+      
+    },
+    clickMenu(item) {
+      if (item.path !== this.$route.path) {
+        this.$router.push({
+          name: item.name
+        })
+      }
+      this.activeIndex = item.name;
+    }
+  },
+  mounted() {
+    this.activeIndex = this.$route.name;
+    // console.log(this.$router);
+    // console.log(constantRoute);
+  }
+}
+</script>
+<style scoped>
+.active {
+  background-color: #008000 !important;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+>>>>>>> c6dff60 (完善页面)
 </style>

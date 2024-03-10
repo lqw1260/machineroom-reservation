@@ -12,7 +12,11 @@ export default {
   },
   methods:{
     goHome(){
+<<<<<<< HEAD
       this.$router.push('/')
+=======
+      location.href = '/'
+>>>>>>> c6dff60 (完善页面)
     }
   }
 }
