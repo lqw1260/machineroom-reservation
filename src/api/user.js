@@ -69,6 +69,8 @@ export default {
         }
         //如果有返回成功信息
         const { name } = checkUser
+        //todo
+        //返回身份权限roles
         return { code: 200, data: { name } }
     },
 }
