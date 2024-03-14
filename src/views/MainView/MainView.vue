@@ -134,8 +134,8 @@
                             <el-image style="width: 100%;" :src="roomImg" @click = jumpToCheck(item)></el-image>
                             <div style="padding: 14px;">
                                 <span>{{item.name}}</span>
-                                <span style="float:right" :class="item.firstFeature">{{features[item.features[0]]}}</span>
-                                <span style="float:right" :class="item.secondFeature">{{features[item.features[1]]}}</span>
+                                <span style="float:right" :class="item.firstFeature">{{features[item.features[1]]}}</span>
+                                <span style="float:right" :class="item.secondFeature">{{features[item.features[2]]}}</span>
                                 <br>
                                 <span>{{item.admin}}</span>
                                 <span style="float:right" class="machineroomFeature clickReserve" @click="clickReserve(item)">点击预约</span>
@@ -155,8 +155,8 @@
                 <el-image style="width: 100%;" :src="roomImg"></el-image>
                 <div style="padding: 14px;">
                     <span>{{quickRoom.name}}</span>
-                    <span style="float:right" :class="quickRoom.firstFeature">{{features[quickRoom.features[0]]}}</span>
-                    <span style="float:right" :class="quickRoom.secondFeature">{{features[quickRoom.features[1]]}}</span>
+                    <span style="float:right" :class="quickRoom.firstFeature">{{features[quickRoom.features[1]]}}</span>
+                    <span style="float:right" :class="quickRoom.secondFeature">{{features[quickRoom.features[2]]}}</span>
                     <br>
                     <span>{{quickRoom.admin}}</span>
                 </div>
@@ -224,6 +224,9 @@
                 <el-option label="第八节" value="8"></el-option>
                 </el-select>
             </el-form-item>
+            <el-form-item label="申请原因">
+                <el-input type="textarea" v-model="reserveRoom.reason"></el-input>
+            </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
             <el-button @click="reserveDialog = false">取 消</el-button>
@@ -280,6 +283,7 @@ export default {
           dayOfWeek:'1',
           beginSection:'1',
           endSection:'1',
+          reason:''
         },
       }
     },
@@ -288,9 +292,9 @@ export default {
         let result = await this.$request.get('api/quickReserve');
         this.dialogVisible=true;
         if(result.data){
-            Object.assign(this.quickRoom,result.data.quickRoom);
-            this.quickRoom.firstFeature.push(result.data.quickRoom.features[0]);
-            this.quickRoom.secondFeature.push(result.data.quickRoom.features[1]);
+            Object.assign(this.quickRoom,result.data);
+            this.quickRoom.firstFeature.push(result.data.features[1]);
+            this.quickRoom.secondFeature.push(result.data.features[2]);
         }
       },
       async getNotification(){
@@ -310,12 +314,12 @@ export default {
       async getMachineroomInfo(){
         let result = await this.$request.get('api/getMachineroom');
         if(result.data){
-            this.machineroom.push(...result.data.machineroom);
+            this.machineroom.push(...result.data);
             for(let i of this.machineroom){
                 this.$set(i,'firstFeature',[]);
                 this.$set(i,'secondFeature',[]);
-                i.firstFeature.push('machineroomFeature',i.features[0]);//机房特点样式
-                i.secondFeature.push('machineroomFeature',i.features[1]);
+                i.firstFeature.push('machineroomFeature',i.features[1]);//机房特点样式
+                i.secondFeature.push('machineroomFeature',i.features[2]);
             }
         }
         console.log(this.machineroom);
@@ -349,11 +353,13 @@ export default {
       },
       async reserveMachineroom(room){
         let m_room = {};
-        m_room.machineroomId = room.machineroomId;
+        m_room.orderJfCode = room.name;
         m_room.weekNum = room.weekNum;
         m_room.dayOfWeek = room.dayOfWeek;
-        m_room.beginSection = room.beginSection;
+        m_room.startSection = room.beginSection;
         m_room.endSection = room.endSection;
+        m_room.applyReason = room.reason;
+        console.log(m_room);
 
         let result = await this.$request.post('api/reserveMachineroom',{data:m_room});
         if(result.code && result.code===200){

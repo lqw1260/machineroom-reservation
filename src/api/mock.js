@@ -11,7 +11,8 @@ import appointmentRecord from './appointmentRecord'
 import applicationProcessing from './applicationProcessing'
 
 Mock.mock('http://localhost:8080/api/login', 'post', user.login)
-Mock.mock('http://localhost:8080/api/getUserInfo', 'post', user.getUserInfo)
+Mock.mock('http://localhost:8080/api/getUserInfo', 'get', user.getUserInfo)
+Mock.mock(RegExp('http://localhost:8080/api/getUserInfo'), 'get', user.getUserInfo)
 
 Mock.mock('http://localhost:8080/api/getNotification', 'get', mainView.getNotification)
 Mock.mock('http://localhost:8080/api/getMachineroom', 'get', mainView.getMachineroom)

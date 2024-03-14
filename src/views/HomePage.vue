@@ -58,8 +58,9 @@ export default {
   async created(){
     let token = localStorage.getItem('token');
     // console.log(token);
+    let account = localStorage.getItem('account')
     if(token){
-      await this.$request.post('/api/getUserInfo',{data:{token}}).then((userInfo)=>{
+      await this.$request.get('/api/getUserInfo',{params:{account}}).then((userInfo)=>{
         console.log(userInfo);
         this.$store.commit('setToken',token);
         this.$store.commit('updateUserInfo',userInfo.data);

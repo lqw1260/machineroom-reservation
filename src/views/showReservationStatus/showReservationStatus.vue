@@ -4,8 +4,8 @@
             <div style="margin: 10px 0;">
                 <i class="el-icon-s-home" style="font-size:40px;padding: 0 5px"></i>
                 <span style="font-size:25px;padding: 0 5px">{{ item.name }}</span>
-                <span :class="item.firstFeature">{{features[item.features[0]]}}</span>
-                <span :class="item.secondFeature">{{features[item.features[1]]}}</span>
+                <span :class="item.firstFeature">{{features[item.features[1]]}}</span>
+                <span :class="item.secondFeature">{{features[item.features[2]]}}</span>
                 <el-button type="info" class="leaveMessage">
                     <i class="el-icon-message"></i>
                     留言反馈

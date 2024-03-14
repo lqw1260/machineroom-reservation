@@ -26,6 +26,8 @@ const mutations = {
     updateUserInfo(state, val) {
         // state.user.name = val.name
         Object.assign(state.user, val);
+        console.log(state.user);
+        // state.user = val
     }
 }
 //准备state对象——保存具体的数据

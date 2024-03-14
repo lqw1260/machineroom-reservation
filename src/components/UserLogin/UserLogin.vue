@@ -5,13 +5,13 @@
             <span>未登录</span>
         </template>
         <template v-else>
-            <span>{{$store.state.user.name}}</span>
+            <span>{{$store.state.user.realName}}</span>
         </template>
 
         <el-dialog title="系统登录" :visible.sync="isopen" width="40%">
             <el-form :model="form" :rules="rules">
-                <el-form-item label="账号" :label-width="formLabelWidth" :required="true" prop="username">
-                    <el-input v-model="form.username" autocomplete="off"></el-input>
+                <el-form-item label="账号" :label-width="formLabelWidth" :required="true" prop="account">
+                    <el-input v-model="form.account" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" :label-width="formLabelWidth" :required="true" prop="password">
                     <el-input v-model="form.password" autocomplete="off" type="password"></el-input>
@@ -31,14 +31,14 @@ export default {
     data(){
         return{
             form: {
-                username: '',//账号
+                account: '',//账号
                 password: '',//密码
             },
             dialogFormVisible: false,//是否展示对话框
             formLabelWidth: '120px',
             //表单验证规则
             rules: {
-                username: [
+                account: [
                     { required: true, message: '请输入活动名称', trigger: 'blur' },
                     { min: 3, max: 8, message: '长度在 3 到 8 个字符', trigger: 'blur' }
                 ],
@@ -63,20 +63,23 @@ export default {
             //发送请求
             const result = await this.$request.post('/api/login',{data:this.form}).catch(()=>{
                 //获取失败的情况
-                this.form.username=''
+                this.form.account=''
                 this.form.password=''
             })
             //获取token并保存到本地
             if(result.data){
-                let { token } = result.data;
-                localStorage.setItem('token',token);
-                this.$store.commit('setToken',token);
+                let { tokenValue } = result.data;
+                // console.log(result.data);
+                localStorage.setItem('token',tokenValue);
+                this.$store.commit('setToken',tokenValue);
+                this.$store.commit('updateUserInfo',result.data);
                 // 更新用户信息
-                const userInfo = await this.$request.post('/api/getUserInfo',{data:{token}});
+                
+                const userInfo = await this.$request.get('/api/getUserInfo',{params:{account:this.form.account}});
                 this.$store.commit('updateUserInfo',userInfo.data);
-
+                localStorage.setItem('account',this.form.account);
                 this.$nextTick(()=>{
-                    this.form.username=''
+                    this.form.account=''
                     this.form.password=''
                     this.dialogFormVisible = false
                 })
