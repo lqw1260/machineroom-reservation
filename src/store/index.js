@@ -28,6 +28,18 @@ const mutations = {
         Object.assign(state.user, val);
         console.log(state.user);
         // state.user = val
+        if (val.type === 0) {
+            state.routes.push({
+                path: 'applicationProcessing',
+                name: 'applicationProcessing',
+                component: () => import('@/views/applicationProcessing/applicationProcessing.vue'),
+                meta: {
+                    title: '申请处理',
+                    isShow: true
+                }
+            })
+        }
+
     }
 }
 //准备state对象——保存具体的数据
@@ -39,6 +51,7 @@ const state = {
     routes: constantRoute[0].children.filter((item) => {
         return !!item.meta.isShow
     })
+    // routes: constantRoute[0].children
 }
 
 export default new Vuex.Store({

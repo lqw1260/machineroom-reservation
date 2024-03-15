@@ -30,8 +30,10 @@ Mock.mock('http://localhost:8080/api/getPeriodCourse', 'get', showReservationSta
 Mock.mock(RegExp('http://localhost:8080/api/getPeriodCourse.*'), 'get', showReservationStatus.getPeriodCourse)
 
 Mock.mock('http://localhost:8080/api/getAppointmentRecord', 'get', appointmentRecord.getAppointmentRecord)
+Mock.mock(RegExp('http://localhost:8080/api/getAppointmentRecord.*'), 'get', appointmentRecord.getAppointmentRecord)
 Mock.mock(RegExp('http://localhost:8080/api/cancelAppoinment.*'), 'get', appointmentRecord.cancelAppoinment)
+Mock.mock(RegExp('http://localhost:8080/api/cancelAppoinment.*'), 'put', appointmentRecord.cancelAppoinment)
 
 Mock.mock('http://localhost:8080/api/getApplication', 'get', applicationProcessing.getApplication)
-Mock.mock(RegExp('http://localhost:8080/api/rejectApplication'), 'get', applicationProcessing.rejectApplication)
-Mock.mock(RegExp('http://localhost:8080/api/agreeApplication'), 'get', applicationProcessing.agreeApplication)
+Mock.mock(RegExp('http://localhost:8080/api/rejectApplication.*'), 'put', applicationProcessing.rejectApplication)
+Mock.mock(RegExp('http://localhost:8080/api/agreeApplication.*'), 'put', applicationProcessing.agreeApplication)

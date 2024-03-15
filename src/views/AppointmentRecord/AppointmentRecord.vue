@@ -61,11 +61,38 @@
     </div>
 </template>
 <script>
+let status = {
+    "0":"待审核",
+    "1":"同意",
+    "2":"拒绝",
+    "3":"用户取消"
+}
+function handler(items) {  
+    let obj = "一二三四五六七八九"
+    items.forEach(item => {  
+        const orderDayStr = item.orderDay.toString();  
+        const weekAndDay = orderDayStr.slice(-4); // 获取后四位，表示周数和星期几  
+        const week = parseInt(weekAndDay.slice(0, 2), 10); // 周数  
+        const day = parseInt(weekAndDay.slice(2), 10); // 星期几  
+        item.appoinmentWeek = week;
+        item.appoinmentDate = "星期" + obj[day-1];
+
+        if(item.orderStatus === 1){
+            item.operation = "取消"
+        }
+        else{
+            item.operation = '\\'
+        }
+        item.status = status[item.orderStatus]
+    });  
+      
+}  
+
 export default {
     data() {
       return {
         recordTableColumn:[{
-            prop:'machineroomName',
+            prop:'orderJfCode',
             label:'预约机房',
         },{
             prop:'appoinmentWeek',
@@ -80,10 +107,10 @@ export default {
             prop:'endSection',
             label:'结束节数',
         },{
-            prop:'appoinmentTime',
+            prop:'orderDate',
             label:'申请时间',
         },{
-            prop:'appoinmentStatus',
+            prop:'status',
             label:'状态',
         },],
         // {
@@ -98,9 +125,10 @@ export default {
     },
     methods:{
         async getAppointmentRecord(){
-            let result = await this.$request.get('api/getAppointmentRecord');
+            let result = await this.$request.get('api/getAppointmentRecord/'+ this.$store.state.user.account);
+            handler(result.data)
             if(result.data){
-                this.records.push(...result.data.records);
+                this.records.push(...result.data);
                 this.total=this.records.length;
                 this.tableData.push(...this.records.slice(0,10));
             }
@@ -120,9 +148,12 @@ export default {
         
         async handleEdit(index,row) {
             console.log(row.recordId);
-            let result = await this.$request.get('api/cancelAppoinment',{params:{recordId:row.recordId}});
+            // let result = await this.$request.get('api/cancelAppoinment',{params:{recordId:row.recordId}});
+            let result = await this.$request.put('api/cancelAppoinment/'+row.id);
             if(result.code && result.code===200){
                 this.open2();
+                row.status = status[3]
+                row.operation = '\\'
             }
             else{
                 this.open4();

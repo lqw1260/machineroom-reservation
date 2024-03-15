@@ -34,7 +34,7 @@
                             </template> -->
                         </el-table-column>
                         <el-table-column 
-                        prop="appoinmentReason"
+                        prop="applyReason"
                         label="申请理由"
                         align="center"
                         table-layout='auto'
@@ -44,7 +44,7 @@
                             </template>
                         </el-table-column>
                         <el-table-column 
-                        prop="appoinmentStatus"
+                        prop="status"
                         label="状态"
                         align="center">
 
@@ -67,8 +67,8 @@
         title="申请理由"
         :visible.sync="dialogVisible"
         width="30%">
-            <span>{{currentApplication.appoinmentReason}}</span>
-            <span slot="footer" class="dialog-footer" v-if="currentApplication.appoinmentStatus==='未处理'">
+            <span>{{currentApplication.applyReason}}</span>
+            <span slot="footer" class="dialog-footer" v-if="currentApplication.status==='待审核'">
                 <el-button @click="clickReject">驳 回</el-button>
                 <el-button type="primary" @click="clickAgree">同 意</el-button>
             </span>
@@ -88,6 +88,32 @@
     </div>
 </template>
 <script>
+let status = {
+    "0":"待审核",
+    "1":"同意",
+    "2":"拒绝",
+    "3":"用户取消"
+}
+function handler(items) {  
+    let obj = "一二三四五六七八九"
+    items.forEach(item => {  
+        const orderDayStr = item.orderDay.toString();  
+        const weekAndDay = orderDayStr.slice(-4); // 获取后四位，表示周数和星期几  
+        const week = parseInt(weekAndDay.slice(0, 2), 10); // 周数  
+        const day = parseInt(weekAndDay.slice(2), 10); // 星期几  
+        item.appoinmentWeek = week;
+        item.appoinmentDate = "星期" + obj[day-1];
+
+        if(item.orderStatus === 1){
+            item.operation = "取消"
+        }
+        else{
+            item.operation = '\\'
+        }
+        item.status = status[item.orderStatus]
+    });  
+      
+}  
 export default {
     data(){
         return {
@@ -95,7 +121,7 @@ export default {
                 prop:'serialNumber',
                 label:'序号',
             },{
-                prop:'machineroomName',
+                prop:'orderJfCode',
                 label:'预约机房',
             },{
                 prop:'appoinmentWeek',
@@ -110,16 +136,16 @@ export default {
                 prop:'endSection',
                 label:'结束节数',
             },{
-                prop:'appoinmentTime',
+                prop:'orderDate',
                 label:'申请时间',
             },{
                 prop:'applicant',
                 label:'申请人'
             },{
-                prop:'appoinmentReason',
+                prop:'applyReason',
                 label:'申请理由'
             },{
-                prop:'appoinmentStatus',
+                prop:'status',
                 label:'状态',
             },],
             currentPage:1,
@@ -150,24 +176,32 @@ export default {
             console.log("下一页");
         },
         async getApplication(){
-            let result = await this.$request.get('api/getApplication');
+            let result = await this.$request.get('api/getAppointmentRecord/'+ this.$store.state.user.account);
+            handler(result.data)
             if(result.data){
-                this.applications.push(...result.data.applications);
+                this.applications.push(...result.data);
                 this.total=this.applications.length;
                 this.tableData.push(...this.applications.slice(0,10));
             }
         },
         async agreeApplication(){
-            let params={
-                applicationId:this.currentApplication.applicationId
-            }
-            let result = await this.$request.get('api/agreeApplication',{params});
+            // let params={
+            //     applicationId:this.currentApplication.id
+            // }
+            let result = await this.$request.put('api/agreeApplication/'+ this.currentApplication.id);
             
             if(result.code && result.code===200){
                 this.$message({
                 message: '已同意申请',
                 type: 'success'
                 });
+                for(let i=0; i<this.applications.length;i++){
+                    if(this.applications[i].id === this.currentApplication.id){
+                        this.applications[i].status = '同意'
+                    }
+                }
+                this.dialogVisible=false;
+                this.innerVisible=false;
             }
             else{
                 this.$message.error('同意申请失败');
@@ -175,26 +209,33 @@ export default {
             
         },
         async rejectApplication(){
-            let params={
-                applicationId:this.currentApplication.applicationId,
-                rejectReason:this.rejectReason,
-            }
-            let result = await this.$request.get('api/rejectApplication',{params});
+            // let params={
+            //     applicationId:this.currentApplication.id,
+            //     rejectReason:this.rejectReason,
+            // }
+            let result = await this.$request.put('api/rejectApplication/'+ this.currentApplication.id);
             if(result.code && result.code===200){
                 this.$message({
                 message: '已驳回申请',
                 type: 'success'
                 });
+                for(let i=0; i<this.applications.length;i++){
+                    if(this.applications[i].id === this.currentApplication.id){
+                        this.applications[i].status = '拒绝'
+                    }
+                }
+                this.dialogVisible=false;
+                this.innerVisible=false;
             }
             else{
                 this.$message.error('驳回申请失败');
             }
         },
         cellClick(row,column){
-            // console.log(column);
-            if(column.property==='appoinmentReason'){
+            console.log(column);
+            if(column.property==='applyReason'){
                 console.log(111);
-                console.log(row.applicationId);
+                console.log(row.id);
                 this.dialogVisible=true;
                 Object.assign(this.currentApplication,row);
             }

@@ -30,7 +30,8 @@ export const constantRoute = [
                     }
                 },
                 meta: {
-                    title: '预约情况'
+                    title: '预约情况',
+                    isShow: false
                 }
             },
             {

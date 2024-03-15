@@ -227,6 +227,9 @@
             <el-form-item label="申请原因">
                 <el-input type="textarea" v-model="reserveRoom.reason"></el-input>
             </el-form-item>
+            <el-form-item label="备注">
+                <el-input type="textarea" v-model="reserveRoom.remark"></el-input>
+            </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
             <el-button @click="reserveDialog = false">取 消</el-button>
@@ -236,6 +239,50 @@
     </div>
 </template>
 <script>
+function generateSchoolString(weekNumber, dayOfWeek, date = new Date()) {  
+    // 获取当前年份和月份  
+    let currentYear = date.getFullYear();  
+    let currentMonth = date.getMonth() + 1; // 月份是从0开始的，所以要加1  
+  
+    let secondYear = currentYear;
+    // 根据月份判断是第一学期还是第二学期  
+    let semester;  
+    if (currentMonth >= 9 && currentMonth <= 2) {  
+        semester = 1; // 第一学期  
+        if(currentMonth <=2){
+            currentYear--;
+        }
+        else{
+            secondYear+=1;
+        }
+    } else if (currentMonth >= 3 && currentMonth <= 8) {  
+        semester = 2; // 第二学期  
+        currentYear--;
+    } else {  
+        throw new Error('Invalid month for semester determination');  
+    }  
+  
+    // 计算目标年份  
+    // let targetYear = currentYear.slice(-2);  
+    // if (semester === 1 && currentMonth < 9) {  
+    //     targetYear++; // 如果是第一学期，但当前月份小于9月，则目标年份是下一年  
+    // }  
+  
+    // 计算目标日期  
+    // const firstDayOfSemester = new Date(targetYear, semester === 1 ? 8 : 2, 1); // 第一学期为9月1日，第二学期为3月1日  
+    // const dayOfWeekOffset = firstDayOfSemester.getDay(); // 获取第一周的星期几  
+    // const targetDate = new Date(firstDayOfSemester.setDate(firstDayOfSemester.getDate() + (weekNumber - 1) * 7 + dayOfWeek - dayOfWeekOffset));  
+  
+    // 格式化目标日期  
+    const targetYearStr = currentYear.toString().slice(-2).padStart(2, '0');  
+    const nextYearStr = secondYear.toString().slice(-2).padStart(2, '0');  
+    const semesterStr = semester.toString();  
+    const weekStr = weekNumber.toString().padStart(2, '0'); // 注意：JavaScript没有原生的getWeek方法，这里需要自定义  
+    const dayOfWeekStr = dayOfWeek.toString().padStart(2, '0');  
+  
+    // 拼接并返回字符串  
+    return `${targetYearStr}${nextYearStr}${semesterStr}${weekStr}${dayOfWeekStr}`;  
+}  
 import roomImg from '@/assets/machineroomImg/u53.png' //el-image用不了相对地址，暂时先引用
 export default {
     data() {
@@ -283,7 +330,8 @@ export default {
           dayOfWeek:'1',
           beginSection:'1',
           endSection:'1',
-          reason:''
+          reason:'',
+          remark:''
         },
       }
     },
@@ -352,7 +400,10 @@ export default {
         this.reserveRoom.machineroomId = item.machineroomId
       },
       async reserveMachineroom(room){
+        
         let m_room = {};
+        m_room.orderDay = generateSchoolString(room.weekNum,room.dayOfWeek);
+        console.log(m_room.orderDay);
         m_room.orderJfCode = room.name;
         m_room.weekNum = room.weekNum;
         m_room.dayOfWeek = room.dayOfWeek;

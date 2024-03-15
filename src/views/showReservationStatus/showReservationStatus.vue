@@ -45,10 +45,10 @@
                 <div class="machineroomInfo">
                     <h4>机房信息 <span class="roomStatus">开放中</span></h4>
                     <div class="info">
-                        <p>设备数量：{{ roomInfo.equipmentQuantity }}</p>
+                        <p>设备数量：{{ roomInfo.computerNumbers }}</p>
                         <p>管理员: {{ item.admin }}</p>
-                        <p>管理员联系方式：{{ roomInfo.adminContact}}</p>
-                        <p>机房简介:&nbsp;{{ roomInfo.Introduction }}</p>
+                        <!-- <p>管理员联系方式：{{ roomInfo.adminContact}}</p> -->
+                        <p>机房简介:&nbsp;{{ roomInfo.introduction }}</p>
                     </div>
                 </div>
                 <div class="reservationStatus">
@@ -69,6 +69,29 @@
     </div>
 </template>
 <script>
+function createScheduleArray(items) {  
+    const scheduleArray = Array(11).fill(0).map(() => Array(9).fill(0)); // 初始化11x9的二维数组，所有值为0  
+      
+    items.forEach(item => {  
+        const orderDayStr = item.orderDay.toString();  
+        const weekAndDay = orderDayStr.slice(-4); // 获取后四位，表示周数和星期几  
+        // const week = parseInt(weekAndDay.slice(0, 2), 10); // 周数  
+        const day = parseInt(weekAndDay.slice(2), 10); // 星期几  
+          
+        // 注意：星期几可能需要转换为从0开始的索引，因为数组索引是从0开始的  
+        const dayIndex = (day - 1 + 2); // 星期几转为数组索引，n+2列（假设星期天为第0列，星期一为第1列，依此类推）  
+          
+        const startSection = item.startSection - 1; // 节数通常从1开始，但数组索引从0开始，所以减1  
+        const endSection = item.endSection - 1;  
+          
+        // 在二维数组的对应位置填充1  
+        for (let i = startSection; i <= endSection; i++) {  
+            scheduleArray[i][dayIndex] = 1;  
+        }  
+    });  
+      
+    return scheduleArray;  
+}  
 export default {
     data(){
         return{
@@ -235,26 +258,29 @@ export default {
         },
         async getCourse(){
             let params = {
-                machineroomId:this.item.machineroomId,
+                jfCode:this.item.name,
                 weekNumber:this.weekNumber
             }
+            console.log(params);
             let result = await this.$request.get('api/getCourse',{params})
             console.log(result.data);
             if(result.data){
                 this.courseData=[]
-                this.courseData.push(...result.data.courseData)
+                this.courseData = createScheduleArray(result.data)
+                // this.courseData.push(...result.data.courseData)
+                console.log(this.courseData);
             }
         },
         async getRoomInfo(){
-            let machineroomId=this.item.machineroomId;
-            let result = await this.$request.get('api/getRoomInfo',{params:{machineroomId}});
+            let jfCode=this.item.name;
+            let result = await this.$request.get('api/getRoomInfo',{params:{jfCode}});
             if(result.data){
-                Object.assign(this.roomInfo,result.data.roomInfo)
+                Object.assign(this.roomInfo,result.data)
             }
         },
         async getPeriodCourse(row, column){
             let params = {
-                machineroomId:this.item.machineroomId,
+                jfCode:this.item.name,
                 weekNumber:this.weekNumber,
                 dayOfWeek:column,
                 sectionNumber:row,
@@ -267,7 +293,8 @@ export default {
     },
     created(){
         this.getCourse();
-        this.getRoomInfo();
+        // this.getRoomInfo();
+        Object.assign(this.roomInfo, this.item)
     }
 }
 </script>
