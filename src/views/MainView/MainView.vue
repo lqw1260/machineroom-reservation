@@ -442,7 +442,7 @@ export default {
         m_room.applyReason = room.reason;
         console.log(m_room);
 
-        let result = await this.$request.post('api/user-service/applyMachineRoom',{data:m_room});
+        let result = await this.$request.post('api/user-service/applyMachineRoom',m_room);
         if(result.code && result.code===200){
             this.$message({
             message: '已发送请求',
