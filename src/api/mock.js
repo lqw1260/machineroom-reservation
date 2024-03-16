@@ -19,6 +19,7 @@ Mock.mock('http://localhost:8080/api/getMachineroom', 'get', mainView.getMachine
 Mock.mock('http://localhost:8080/api/getMessage', 'get', mainView.getMessage)
 Mock.mock('http://localhost:8080/api/quickReserve', 'get', mainView.quickReserve)
 Mock.mock('http://localhost:8080/api/seachMachineroom', 'post', mainView.seachMachineroom)
+Mock.mock(RegExp('http://localhost:8080/api/seachMachineroom.*'), 'get', mainView.seachMachineroom)
 Mock.mock('http://localhost:8080/api/reserveMachineroom', 'post', mainView.reserveMachineroom)
 
 

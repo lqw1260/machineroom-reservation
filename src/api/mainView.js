@@ -5,18 +5,19 @@ export default {
             data: {
                 notification: [{
                     notificationId: '111',
-                    title: "关于111通知...",
+                    title: "由于机房设备维护，本周五机房关闭。",
                     time: "2020-11-11"
                 },
                 {
                     notificationId: '222',
-                    title: "关于222通知...",
-                    time: "2020-11-11"
+                    // title: "机房预约系统将于本周三进行系统维护，届时可能无法正常预约。",
+                    title: "机房预约系统将于本周三进行系统维护，届时······",
+                    time: "2020-11-15"
                 },
                 {
                     notificationId: '333',
-                    title: "关于333通知...",
-                    time: "2020-11-11"
+                    title: "机房预约系统新增了在线预约功能，欢迎体验",
+                    time: "2020-11-19"
                 }],
             }
         }
@@ -28,9 +29,14 @@ export default {
                 message: [
                     {
                         messageId: '111',
-                        title: "关于xxx通知...",
+                        title: "您的机房预约已确认，请准时前往。",
                         time: "2020-11-11"
-                    }],
+                    }, {
+                        messageId: '222',
+                        title: "您的机房预约已驳回，请重新预约。",
+                        time: "2020-11-11"
+                    },
+                ],
             }
         }
     },
@@ -233,31 +239,72 @@ export default {
         console.log(form);
         return {
             code: 200,
-            data: {
-                machineroom: [
-                    {
-                        imgSrc: 'xxx',
-                        machineroomId: '444',
-                        name: 'B7-137',
-                        admin: '李明',
-                        features: ['noMargin', 'middleRoom'] //返回特征的编号，写死在前端
-                    },
-                    {
-                        imgSrc: 'xxx',
-                        machineroomId: '555',
-                        name: 'B7-231',
-                        admin: '李明',
-                        features: ['largeMargin', 'bigRoom'] //返回特征的编号，写死在前端
-                    },
-                    {
-                        imgSrc: 'xxx',
-                        machineroomId: '666',
-                        name: 'B7-137',
-                        admin: '李明',
-                        features: ['largeMargin', 'bigRoom'] //返回特征的编号，写死在前端
-                    },
-                ]
-            }
+            // data: {
+            //     machineroom: [
+            //         {
+            //             imgSrc: 'xxx',
+            //             machineroomId: '444',
+            //             name: 'B7-137',
+            //             admin: '李明',
+            //             features: ['noMargin', 'middleRoom'] //返回特征的编号，写死在前端
+            //         },
+            //         {
+            //             imgSrc: 'xxx',
+            //             machineroomId: '555',
+            //             name: 'B7-231',
+            //             admin: '李明',
+            //             features: ['largeMargin', 'bigRoom'] //返回特征的编号，写死在前端
+            //         },
+            //         {
+            //             imgSrc: 'xxx',
+            //             machineroomId: '666',
+            //             name: 'B7-137',
+            //             admin: '李明',
+            //             features: ['largeMargin', 'bigRoom'] //返回特征的编号，写死在前端
+            //         },
+            //     ]
+            // }
+            data: [
+                {
+                    "machineroomId": 9,
+                    "name": "A240109",
+                    "address": "B7-101",
+                    "computerNumbers": 50,
+                    "introduction": "软件学院机房",
+                    "admin": "李老师",
+                    "features": [
+                        "AMD",
+                        "smallMargin",
+                        "smallRoom"
+                    ]
+                },
+                {
+                    "machineroomId": 10,
+                    "name": "A240110",
+                    "address": "B7-101",
+                    "computerNumbers": 50,
+                    "introduction": "软件学院机房",
+                    "admin": "王老师",
+                    "features": [
+                        "AMD",
+                        "smallMargin",
+                        "smallRoom"
+                    ]
+                },
+                {
+                    "machineroomId": 11,
+                    "name": "A240111",
+                    "address": "B7-101",
+                    "computerNumbers": 50,
+                    "introduction": "软件学院机房",
+                    "admin": "李老师",
+                    "features": [
+                        "AMD",
+                        "smallMargin",
+                        "smallRoom"
+                    ]
+                }
+            ]
         }
     },
     quickReserve: () => {

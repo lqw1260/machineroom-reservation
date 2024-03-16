@@ -379,16 +379,21 @@ export default {
 
       },
       async seachMachineroom(){
-        let result = await this.$request.post('api/seachMachineroom',{data:this.formInline});
+        let form = {
+            "address":this.formInline.buildingNum,
+            "jfType":this.formInline.machineroomType
+
+        };
+        let result = await this.$request.get('api/seachMachineroom',{data:form});
         if(result.data){
             //清空machineroom
             this.machineroom = [];
-            this.machineroom.push(...result.data.machineroom);
+            this.machineroom.push(...result.data);
             for(let i of this.machineroom){
                 this.$set(i,'firstFeature',[]);
                 this.$set(i,'secondFeature',[]);
-                i.firstFeature.push('machineroomFeature',i.features[0]);//机房特点样式
-                i.secondFeature.push('machineroomFeature',i.features[1]);
+                i.firstFeature.push('machineroomFeature',i.features[1]);//机房特点样式
+                i.secondFeature.push('machineroomFeature',i.features[2]);
             }
         }
       },
