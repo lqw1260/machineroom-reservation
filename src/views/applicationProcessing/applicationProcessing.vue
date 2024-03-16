@@ -176,7 +176,9 @@ export default {
             console.log("下一页");
         },
         async getApplication(){
-            let result = await this.$request.get('api/common-service/queryOrderInfoList/'+ this.$store.state.user.account);
+            let result = await this.$request.get('api/common-service/queryOrderInfoList',{params:{
+                account:this.$store.state.user.account
+            }});
             handler(result.data)
             if(result.data){
                 this.applications.push(...result.data);

@@ -75,7 +75,7 @@ export default {
                 this.$store.commit('updateUserInfo',result.data);
                 // 更新用户信息
                 
-                const userInfo = await this.$request.get('/api/common-service/getUserInfoByAccount',{params:{account:this.form.account}});
+                const userInfo = await this.$request.get('/api/common-service/getUserInfoByAccount',{data:{account:this.form.account}});
                 this.$store.commit('updateUserInfo',userInfo.data);
                 localStorage.setItem('account',this.form.account);
                 this.$nextTick(()=>{
