@@ -61,7 +61,7 @@ export default {
         },
         async formSubmit(){
             //发送请求
-            const result = await this.$request.post('/api/login-service/doLogin',{data:this.form}).catch(()=>{
+            const result = await this.$request.post('/api/login-service/doLogin',this.form).catch(()=>{
                 //获取失败的情况
                 this.form.account=''
                 this.form.password=''
