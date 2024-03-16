@@ -176,7 +176,7 @@ export default {
             console.log("下一页");
         },
         async getApplication(){
-            let result = await this.$request.get('api/getAppointmentRecord/'+ this.$store.state.user.account);
+            let result = await this.$request.get('api/common-service/queryOrderInfoList/'+ this.$store.state.user.account);
             handler(result.data)
             if(result.data){
                 this.applications.push(...result.data);
@@ -188,7 +188,7 @@ export default {
             // let params={
             //     applicationId:this.currentApplication.id
             // }
-            let result = await this.$request.put('api/agreeApplication/'+ this.currentApplication.id);
+            let result = await this.$request.put('api/admin-service/acceptApplication/'+ this.currentApplication.id);
             
             if(result.code && result.code===200){
                 this.$message({
@@ -213,7 +213,7 @@ export default {
             //     applicationId:this.currentApplication.id,
             //     rejectReason:this.rejectReason,
             // }
-            let result = await this.$request.put('api/rejectApplication/'+ this.currentApplication.id);
+            let result = await this.$request.put('api/admin-service/rejectApplication/'+ this.currentApplication.id);
             if(result.code && result.code===200){
                 this.$message({
                 message: '已驳回申请',

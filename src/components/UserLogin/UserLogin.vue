@@ -61,7 +61,7 @@ export default {
         },
         async formSubmit(){
             //发送请求
-            const result = await this.$request.post('/api/login',{data:this.form}).catch(()=>{
+            const result = await this.$request.post('/api/login-service/doLogin',{data:this.form}).catch(()=>{
                 //获取失败的情况
                 this.form.account=''
                 this.form.password=''
@@ -75,7 +75,7 @@ export default {
                 this.$store.commit('updateUserInfo',result.data);
                 // 更新用户信息
                 
-                const userInfo = await this.$request.get('/api/getUserInfo',{params:{account:this.form.account}});
+                const userInfo = await this.$request.get('/api/common-service/getUserInfoByAccount',{params:{account:this.form.account}});
                 this.$store.commit('updateUserInfo',userInfo.data);
                 localStorage.setItem('account',this.form.account);
                 this.$nextTick(()=>{

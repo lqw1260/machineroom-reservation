@@ -254,7 +254,7 @@ export default {
             console.log(row.serialNumber);
             console.log(column.property);
             // this.periodCourseInfo.courseName='数据挖掘';
-            this.getPeriodCourse(row.serialNumber,column.property);
+            // this.getPeriodCourse(row.serialNumber,column.property);
         },
         async getCourse(){
             let params = {
@@ -262,7 +262,7 @@ export default {
                 weekNumber:this.weekNumber
             }
             console.log(params);
-            let result = await this.$request.get('api/getCourse',{params})
+            let result = await this.$request.get('api/common-service/queryOrderInfoListByWeek',{params})
             console.log(result.data);
             if(result.data){
                 this.courseData=[]

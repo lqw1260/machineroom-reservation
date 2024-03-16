@@ -60,7 +60,7 @@ export default {
     // console.log(token);
     let account = localStorage.getItem('account')
     if(token){
-      await this.$request.get('/api/getUserInfo',{params:{account}}).then((userInfo)=>{
+      await this.$request.get('/api/common-service/getUserInfoByAccount',{params:{account}}).then((userInfo)=>{
         console.log(userInfo);
         this.$store.commit('setToken',token);
         this.$store.commit('updateUserInfo',userInfo.data);

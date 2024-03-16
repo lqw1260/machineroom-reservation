@@ -8,7 +8,7 @@ import router from './router';
 // 引入store
 import store from './store';
 // import "./styles";
-import './api/mock'
+// import './api/mock'
 Vue.config.productionTip = false
 
 Vue.use(ElementUI);

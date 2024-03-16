@@ -125,7 +125,7 @@ export default {
     },
     methods:{
         async getAppointmentRecord(){
-            let result = await this.$request.get('api/getAppointmentRecord/'+ this.$store.state.user.account);
+            let result = await this.$request.get('api/common-service/queryOrderInfoList/'+ this.$store.state.user.account);
             handler(result.data)
             if(result.data){
                 this.records.push(...result.data);
@@ -149,7 +149,7 @@ export default {
         async handleEdit(index,row) {
             console.log(row.recordId);
             // let result = await this.$request.get('api/cancelAppoinment',{params:{recordId:row.recordId}});
-            let result = await this.$request.put('api/cancelAppoinment/'+row.id);
+            let result = await this.$request.put('api/user-service/cancelApplication/'+row.id);
             if(result.code && result.code===200){
                 this.open2();
                 row.status = status[3]

@@ -296,8 +296,33 @@ export default {
           beginSection:'1',
           endSection:'1',
         },
-        notification:[],
-        message:[],
+        notification:[{
+                    notificationId: '111',
+                    title: "由于机房设备维护，本周五机房关闭。",
+                    time: "2020-11-11"
+                },
+                {
+                    notificationId: '222',
+                    // title: "机房预约系统将于本周三进行系统维护，届时可能无法正常预约。",
+                    title: "机房预约系统将于本周三进行系统维护，届时······",
+                    time: "2020-11-15"
+                },
+                {
+                    notificationId: '333',
+                    title: "机房预约系统新增了在线预约功能，欢迎体验",
+                    time: "2020-11-19"
+                }],
+        message:[
+                    {
+                        messageId: '111',
+                        title: "您的机房预约已确认，请准时前往。",
+                        time: "2020-11-11"
+                    }, {
+                        messageId: '222',
+                        title: "您的机房预约已驳回，请重新预约。",
+                        time: "2020-11-11"
+                    },
+                ],
         machineroom:[],
         roomImg,
         // machineroomFeature:['machineroomFeature'],
@@ -337,7 +362,7 @@ export default {
     },
     methods: {
       async quickReserve() {
-        let result = await this.$request.get('api/quickReserve');
+        let result = await this.$request.get('api/user-service/quickApply');
         this.dialogVisible=true;
         if(result.data){
             Object.assign(this.quickRoom,result.data);
@@ -360,7 +385,7 @@ export default {
         // console.log(this.message);
       },
       async getMachineroomInfo(){
-        let result = await this.$request.get('api/getMachineroom');
+        let result = await this.$request.get('api/common-service/queryMachineRoomListByCond');
         if(result.data){
             this.machineroom.push(...result.data);
             for(let i of this.machineroom){
@@ -384,7 +409,7 @@ export default {
             "jfType":this.formInline.machineroomType
 
         };
-        let result = await this.$request.get('api/seachMachineroom',{data:form});
+        let result = await this.$request.get('api/common-service/queryMachineRoomListByCond',{params:form});
         if(result.data){
             //清空machineroom
             this.machineroom = [];
@@ -417,7 +442,7 @@ export default {
         m_room.applyReason = room.reason;
         console.log(m_room);
 
-        let result = await this.$request.post('api/reserveMachineroom',{data:m_room});
+        let result = await this.$request.post('api/user-service/applyMachineRoom',{data:m_room});
         if(result.code && result.code===200){
             this.$message({
             message: '已发送请求',
@@ -447,8 +472,8 @@ export default {
     
     created(){
         this.getMachineroomInfo();
-        this.getMessage();
-        this.getNotification();
+        // this.getMessage();
+        // this.getNotification();
     }
 }
 </script>
