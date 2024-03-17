@@ -411,6 +411,7 @@ export default {
         machineroomId: "",
         name: "",
         admin: "",
+        weekNum: 1,
         features: [], //返回特征的编号，写死在前端
         firstFeature: ["machineroomFeature"],
         secondFeature: ["machineroomFeature"],
@@ -504,9 +505,13 @@ export default {
       m_room.orderJfCode = room.name;
       m_room.weekNum = room.weekNum;
       m_room.dayOfWeek = room.dayOfWeek;
-      m_room.startSection = room.beginSection;
-      m_room.endSection = room.endSection;
-      m_room.applyReason = room.reason;
+      m_room.startSection =
+        room.beginSection || this.formInline.startSection || 1;
+      m_room.endSection = room.endSection || this.formInline.endSection || 4;
+      m_room.applyReason = room.reason || "上课";
+      m_room.remark = "提前10分钟开门";
+      console.log(this.$store.state.user);
+      m_room.orderAccount = this.$store.state.user.account;
       console.log(m_room);
 
       let result = await this.$request.post(
@@ -525,6 +530,8 @@ export default {
     },
     sendQuickRequest() {
       console.log(this.quickRoom);
+      this.quickRoom.weekNum = this.formInline.weekNum;
+      this.quickRoom.dayOfWeek = this.formInline.dayOfWeek;
       this.reserveMachineroom(this.quickRoom);
     },
     jumpToCheck(item) {

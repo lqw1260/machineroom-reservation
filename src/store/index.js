@@ -32,7 +32,7 @@ const mutations = {
         Object.assign(state.user, val);
         console.log(state.user);
         // state.user = val
-        if (val.type === 1) {
+        if (val.type > 0) {
             state.routes.push({
                 path: 'applicationProcessing',
                 name: 'applicationProcessing',

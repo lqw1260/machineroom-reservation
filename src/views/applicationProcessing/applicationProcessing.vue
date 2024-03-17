@@ -150,7 +150,7 @@ export default {
           label: "申请时间",
         },
         {
-          prop: "applicant",
+          prop: "orderAccount",
           label: "申请人",
         },
         {
@@ -194,12 +194,7 @@ export default {
     },
     async getApplication() {
       let result = await this.$request.get(
-        "api/user-service/queryApplyHistory",
-        {
-          params: {
-            account: this.$store.state.user.account,
-          },
-        }
+        "api/admin-service/queryOrderListByCond"
       );
       handler(result.data);
       if (result.data) {
