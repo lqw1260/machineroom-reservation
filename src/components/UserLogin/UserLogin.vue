@@ -68,10 +68,12 @@ export default {
             })
             //获取token并保存到本地
             if(result.data){
-                let { tokenValue } = result.data;
+                let { tokenValue,tokenName } = result.data;
                 // console.log(result.data);
                 localStorage.setItem('token',tokenValue);
+                localStorage.setItem('tokenName',tokenName);
                 this.$store.commit('setToken',tokenValue);
+                this.$store.commit('setTokenName',tokenName);
                 this.$store.commit('updateUserInfo',result.data);
                 // 更新用户信息
                 

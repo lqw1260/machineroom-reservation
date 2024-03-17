@@ -284,6 +284,7 @@ function generateSchoolString(weekNumber, dayOfWeek, date = new Date()) {
     return `${targetYearStr}${nextYearStr}${semesterStr}${weekStr}${dayOfWeekStr}`;  
 }  
 import roomImg from '@/assets/machineroomImg/u53.png' //el-image用不了相对地址，暂时先引用
+//import main from 'merge';
 export default {
     data() {
       return {
@@ -385,7 +386,7 @@ export default {
         // console.log(this.message);
       },
       async getMachineroomInfo(){
-        let result = await this.$request.get('api/common-service/queryMachineRoomListByCond');
+        let result = await this.$request.get('api/common-service/queryMachineRoomListByCond',{main:true});
         if(result.data){
             this.machineroom.push(...result.data);
             for(let i of this.machineroom){
@@ -406,10 +407,10 @@ export default {
       async seachMachineroom(){
         let form = {
             "address":this.formInline.buildingNum,
-            "jfType":this.formInline.machineroomType
-
+            "jfType":this.formInline.machineroomType,
+            main:false
         };
-        let result = await this.$request.get('api/common-service/queryMachineRoomListByCond',{params:form});
+        let result = await this.$request.get('api/common-service/queryMachineRoomListByCond',form);
         if(result.data){
             //清空machineroom
             this.machineroom = [];

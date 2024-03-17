@@ -12,6 +12,10 @@ const mutations = {
         state.token = val
         localStorage.setItem('token', val)
     },
+    setTokenName(state, val) {
+        state.tokenName = val
+        localStorage.setItem('tokenName', val)
+    },
     clearToken(state) {
         state.token = ''
         localStorage.removeItem('token')
@@ -44,7 +48,8 @@ const mutations = {
 }
 //准备state对象——保存具体的数据
 const state = {
-    token: '',
+    token: localStorage.getItem('token') || '',
+    tokenName: localStorage.getItem('tokenName') || '',
     user: {
         name: ''
     },
