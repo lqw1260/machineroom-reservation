@@ -1,4 +1,4 @@
-<template lang="">
+<template lang="html">
     <div>
         <el-card class="box-card" shadow="always">
             <div>
@@ -17,7 +17,7 @@
                         width="60"
                         align="center">
                         </el-table-column>
-                        <el-table-column 
+                        <el-table-column
                         v-for="record in recordTableColumn" :key="record.prop"
                         :prop="record.prop"
                         :label="record.label"
@@ -30,7 +30,7 @@
                                 @click="handleEdit(scope.$index, scope.row)">取消</el-button>
                             </template> -->
                         </el-table-column>
-                        <el-table-column 
+                        <el-table-column
                         prop="operation"
                         label="操作"
                         align="center"
@@ -67,13 +67,13 @@ let status = {
     "2":"拒绝",
     "3":"用户取消"
 }
-function handler(items) {  
+function handler(items) {
     let obj = "一二三四五六七八九"
-    items.forEach(item => {  
-        const orderDayStr = item.orderDay.toString();  
-        const weekAndDay = orderDayStr.slice(-4); // 获取后四位，表示周数和星期几  
-        const week = parseInt(weekAndDay.slice(0, 2), 10); // 周数  
-        const day = parseInt(weekAndDay.slice(2), 10); // 星期几  
+    items.forEach(item => {
+        const orderDayStr = item.orderDay.toString();
+        const weekAndDay = orderDayStr.slice(-4); // 获取后四位，表示周数和星期几
+        const week = parseInt(weekAndDay.slice(0, 2), 10); // 周数
+        const day = parseInt(weekAndDay.slice(2), 10); // 星期几
         item.appoinmentWeek = week;
         item.appoinmentDate = "星期" + obj[day-1];
 
@@ -84,9 +84,9 @@ function handler(items) {
             item.operation = '\\'
         }
         item.status = status[item.orderStatus]
-    });  
-      
-}  
+    });
+
+}
 
 export default {
     data() {
@@ -134,7 +134,7 @@ export default {
             }
         },
         async cancelAppoinment(){
-            
+
         },
         open2() {
             this.$message({
@@ -145,7 +145,7 @@ export default {
         open4() {
             this.$message.error('取消失败');
         },
-        
+
         async handleEdit(index,row) {
             console.log(row.recordId);
             // let result = await this.$request.get('api/cancelAppoinment',{params:{recordId:row.recordId}});

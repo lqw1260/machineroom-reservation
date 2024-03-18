@@ -10,6 +10,8 @@ import appointmentRecord from './appointmentRecord'
 
 import applicationProcessing from './applicationProcessing'
 
+import studentAccount from "@/api/studentAccount";
+
 Mock.mock('http://localhost:8080/api/login', 'post', user.login)
 Mock.mock('http://localhost:8080/api/getUserInfo', 'get', user.getUserInfo)
 Mock.mock(RegExp('http://localhost:8080/api/getUserInfo'), 'get', user.getUserInfo)
@@ -38,3 +40,11 @@ Mock.mock(RegExp('http://localhost:8080/api/cancelAppoinment.*'), 'put', appoint
 Mock.mock('http://localhost:8080/api/getApplication', 'get', applicationProcessing.getApplication)
 Mock.mock(RegExp('http://localhost:8080/api/rejectApplication.*'), 'put', applicationProcessing.rejectApplication)
 Mock.mock(RegExp('http://localhost:8080/api/agreeApplication.*'), 'put', applicationProcessing.agreeApplication)
+Mock.mock(RegExp('http://localhost:8080/api/rejectApplication'), 'get', applicationProcessing.rejectApplication)
+Mock.mock(RegExp('http://localhost:8080/api/agreeApplication'), 'get', applicationProcessing.agreeApplication)
+
+Mock.mock('http://localhost:8080/api/getStudentUsersAccount', 'get', studentAccount.getStudentUsersAccount())
+Mock.mock(RegExp('http://localhost:8080/api/deleteOneItem'), 'post', studentAccount.deleteOneItem)
+Mock.mock('http://localhost:8080/api/search', 'post', studentAccount.search)
+Mock.mock('http://localhost:8080/api/addNewItem', 'post', studentAccount.addNewItem)
+Mock.mock(RegExp('http://localhost:8080/api/deleteItems'), 'post', studentAccount.deleteItems)
