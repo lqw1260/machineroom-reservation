@@ -51,7 +51,16 @@ export const constantRoute = [
                     title: '申请处理',
                     isShow: false
                 }
-            }
+            },
+            {
+                path: '/studentAccount',
+                name: 'studentAccount',
+                component: () => import('@/views/HomePage(admin)/StudentAccount.vue'),
+                meta: {
+                    title: '学生账户管理',
+                    isShow: true,
+                }
+            },
         ]
     },
     {

@@ -32,5 +32,8 @@ html, body {
 #app {
   height: 100vh;
 }
+.container {
+  width: 100vw;
+}
 
 </style>

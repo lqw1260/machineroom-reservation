@@ -24,7 +24,7 @@ const config = {
     production: {
         baseUrl: '/',
         routeBase: '/'
-    }
+    },
 };
 export default merge(baseConfig, config[env]);
 
